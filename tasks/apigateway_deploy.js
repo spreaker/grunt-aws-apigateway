@@ -275,7 +275,6 @@ module.exports = function (grunt) {
         });
     }
 
-
     /**
      * @param {Object} resourcesSetup
      * @param {Object} deploymentSetup

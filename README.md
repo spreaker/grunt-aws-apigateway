@@ -3,19 +3,63 @@
 A grunt plugin to easily configure and deploy AWS API Gateway.
 
 
-### Getting Started
-
-This plugin requires Grunt `~0.4.5`.
-
-If you haven't used [Grunt](http://gruntjs.com/) before, be sure to check out the [Getting Started](http://gruntjs.com/getting-started) guide, as it explains how to create a [Gruntfile](http://gruntjs.com/sample-gruntfile) as well as install and use Grunt plugins. Once you're familiar with that process, you may install this plugin with this command:
+### Install
 
 ```shell
 npm install grunt-aws-apigateway --save-dev
 ```
 
-Once the plugin has been installed, it may be enabled inside your Gruntfile with this line of JavaScript:
+### Usage
 
 ```js
+grunt.initConfig({
+    apigateway_deploy: {
+        options: {
+            accessKeyId: "key",
+            secretAccessKey: "secret",
+            region: "us-east-1"
+        },
+        default: {
+            restApiId: "xxx",
+            deployment: {
+                stageName: "prod"
+            },
+            resources: {
+                "/users": {
+                    methods: {
+                        GET: {
+                            integration: {
+                                type: "AWS",
+                                uri: "arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:xxx:function:getUsers/invocations",
+                                integrationHttpMethod: "POST",
+                                requestTemplates: {
+                                    "application/json": JSON.stringify({
+                                        "filter": "$input.params('filter')"
+                                    })
+                                }
+                            },
+                            responses: {
+                                200: {
+                                    // Pass-through
+                                    responseModels: {
+                                        "application/json": "Empty"
+                                    }
+                                },
+                                400: {
+                                    selectionPattern: "error code: 400",
+                                    responseTemplates: {
+                                        "application/json": JSON.stringify({"error": "$input.path('$.errorMessage')"})
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+});
+
 grunt.loadNpmTasks('grunt-aws-apigateway');
 ```
 
