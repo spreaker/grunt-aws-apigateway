@@ -15,19 +15,19 @@ npm install grunt-aws-apigateway --save-dev
 What you **can** do:
 
 - Create resources
-- Configure resources _Method Request_, _Integration Request_, _Method Response_, _Integratin Response_
-- Deploy changes to a stage
+- Configure resource's _Method Request_, _Integration Request_, _Method Response_, _Integration Response_
+- Deploy API changes to a stage
 
-**Unsupported** features:
+What you **can't** do:
 
 - Create models
 
-**One time things** you should do by hand**:
+**One time configuration** you should do by hand:
 
-- Create API
-- Create stages (than the plugin will deploy the API to the configured stage)
+- Create a new API
+- Create stages (once created, the plugin will deploy the API to the configured stage)
 
-**NOTE**: to ease the development of this plugin, each run it **deletes all resources** and re-create them. This mean that it doesn't apply differential changes and if you've already created some resources that are not part of plugin configuration, you will loose it at the first run.
+**NOTE**: to ease the development of this plugin, each run **deletes all resources** and re-creates them. This means that it doesn't apply differential changes and if you've already created some resources that are not part of plugin configuration, you will loose it at the first run. In other words, make sure the plugin configuration contains all resources of your API.
 
 
 ### Usage
