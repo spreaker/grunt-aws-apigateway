@@ -108,9 +108,9 @@ The plugin config is made of 3 **required** properties:
 - `deployment`
 
 
-##### `resources`
+#### `resources`
 
-The `resources` property contains the configuration of all your API Resources. Resources are organized in a tree, *must* start with a `/` and full path is built concatenating together all parent resources' paths.
+The `resources` property contains the configuration of all your API Resources. Resources are organized in a tree, the path *must* start with a `/` and each resource's full path is built concatenating together all parent resources paths.
 
 Example - create `/tweets/trends` resource:
 ```js
@@ -185,7 +185,7 @@ responses: {
 ```
 
 
-##### `deployment`
+#### `deployment`
 
 The last step of `apigateway_deploy` is to deploy all the changes to a stage. The configuration of this phase is made through the `deployment` property. `stageName` is the only required property.
 
@@ -202,6 +202,13 @@ The last step of `apigateway_deploy` is to deploy all the changes to a stage. Th
 }
 ```
 
+
+### Contributing
+
+You're very welcome to contribute to this pluging, in case you spot any bug, or to add some missing features (ie. create models). Please do you best to:
+
+- Keep the coding style
+- Keep your code as much clean (and readable) as possible
 
 
 ### License
