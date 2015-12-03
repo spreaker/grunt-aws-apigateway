@@ -205,7 +205,7 @@ The last step of `apigateway_deploy` is to deploy all the changes to a stage. Th
 
 ### Contributing
 
-You're very welcome to contribute to this pluging, in case you spot any bug, or to add some missing features (ie. create models). Please do you best to:
+You're very welcome to contribute to this pluging, in case you spot any bug, or to add some missing features (ie. create models). Please do your best to:
 
 - Keep the coding style
 - Keep your code as much clean (and readable) as possible
