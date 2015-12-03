@@ -1,5 +1,10 @@
 # grunt-aws-apigateway
 
+A grunt plugin to easily configure and deploy AWS API Gateway.
+
+
+### Scope
+
 AWS API Gateway configuration through the web console takes lot of mouse clicks and is error prone. This grunt plugin allows you to script and automatically deploy your API Gateway configuration.
 
 
