@@ -1,6 +1,6 @@
 # grunt-aws-apigateway
 
-AWS API Gateway configuration through the web console takes lot of mouse clicks and is error prone. This grunt plugin allows to script the AWS API Gateway configuration.
+AWS API Gateway configuration through the web console takes lot of mouse clicks and is error prone. This grunt plugin allows you to script and automatically deploy your API Gateway configuration.
 
 
 ### Install
@@ -14,7 +14,7 @@ npm install grunt-aws-apigateway --save-dev
 
 What you **can** do:
 
-- Create resources
+- Create API resources
 - Configure resource's _Method Request_, _Integration Request_, _Method Response_, _Integration Response_
 - Deploy API changes to a stage
 
@@ -31,6 +31,8 @@ What you **can't** do:
 
 
 ### Usage
+
+The following usage example could look a bit "verbose" at a first glance. However, AWS API Gateway setup is pretty complex and the following `resources` structure tries to map a much close as possible the AWS API, in order to guarantee the same degree of flexibility.
 
 ```js
 grunt.initConfig({
@@ -82,7 +84,18 @@ grunt.initConfig({
 });
 
 grunt.loadNpmTasks('grunt-aws-apigateway');
+
+grunt.registerTask(
+    "deploy-api",
+    "Deploy the API Gateway config",
+    ["apigateway_deploy"]
+);
 ```
+
+
+### Syntax
+
+TODO
 
 
 ### License
