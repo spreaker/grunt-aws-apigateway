@@ -1,0 +1,28 @@
+{
+  "name": "grunt-aws-apigateway",
+  "version": "0.0.1",
+  "description": "A grunt plugin to easily configure and deploy AWS API Gateway.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/spreaker/grunt-aws-apigateway.git"
+  },
+  "keywords": [
+    "grunt",
+    "aws",
+    "api",
+    "gateway",
+    "setup",
+    "deploy",
+    "config"
+  ],
+  "author": "Marco Pracucci <marco@pracucci.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/spreaker/grunt-aws-apigateway/issues"
+  },
+  "homepage": "https://github.com/spreaker/grunt-aws-apigateway#readme"
+}
