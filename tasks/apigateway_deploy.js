@@ -35,7 +35,7 @@ module.exports = function (grunt) {
      * @param  {Function} callback
      */
     function _createResourceIntegrationResponse(resource, method, status, responseSetup, callback) {
-        grunt.log.writeln(resource.path + " " + method + " - Create integration response for status code " + status);
+        grunt.log.verbose.writeln(resource.path + " " + method + " - Create integration response for status code " + status);
 
         // Prepare request (with defaults)
         var params = {
@@ -62,7 +62,7 @@ module.exports = function (grunt) {
      * @param  {Function} callback
      */
     function _createResourceMethodResponse(resource, method, status, responseSetup, callback) {
-        grunt.log.writeln(resource.path + " " + method + " - Create method response for status code " + status);
+        grunt.log.verbose.writeln(resource.path + " " + method + " - Create method response for status code " + status);
 
         // Prepare request (with defaults)
         var params = {
@@ -89,7 +89,7 @@ module.exports = function (grunt) {
      * @param  {Function} callback
      */
     function _createResourceIntegrationRequest(resource, method, integrationSetup, callback) {
-        grunt.log.writeln(resource.path + " " + method + " - Create integration request");
+        grunt.log.verbose.writeln(resource.path + " " + method + " - Create integration request");
 
         // Prepare request (with defaults)
         var params = {
@@ -121,7 +121,7 @@ module.exports = function (grunt) {
      * @param  {Function} callback
      */
     function _createResourceMethodRequest(resource, method, methodSetup, callback) {
-        grunt.log.writeln(resource.path + " " + method + " - Create method request");
+        grunt.log.verbose.writeln(resource.path + " " + method + " - Create method request");
 
         // Prepare request (with defaults)
         var params = {
@@ -217,7 +217,7 @@ module.exports = function (grunt) {
      * @param  {Function} callback
      */
     function _deleteResource(resource, callback) {
-        grunt.log.writeln("Deleting resource: " + resource.path);
+        grunt.log.writeln("Delete resource: " + resource.path);
 
         var params = {
             resourceId: resource.id,
@@ -241,7 +241,7 @@ module.exports = function (grunt) {
      * @param  {Function} callback
      */
     function _createDeployment(deploymentSetup, callback) {
-        grunt.log.writeln("Deploying to stage " + deploymentSetup.stageName);
+        grunt.log.writeln("Deploy to stage " + deploymentSetup.stageName);
 
         // Prepare request (with defaults)
         var params = {
@@ -285,7 +285,7 @@ module.exports = function (grunt) {
         // Fetch current resources
         _getResources(function(err, resources) {
             if (err) {
-                return console.error("Unable to fetch API resources: " + err.message);
+                return callback(new Error("Unable to fetch API resources: " + err.message));
             }
 
             // Get root resource
@@ -294,7 +294,7 @@ module.exports = function (grunt) {
             });
 
             if (!rootResource) {
-                return console.error("Unable to find root resource");
+                return callback(new Error("Unable to find root resource"));
             }
 
             async.series([
@@ -360,7 +360,7 @@ module.exports = function (grunt) {
             if (err) {
                 grunt.fail.warn(err.message);
             } else {
-                grunt.log.writeln("Deploy completed!");
+                grunt.verbose.ok();
                 done(true);
             }
         });
