@@ -10,29 +10,9 @@ npm install grunt-aws-apigateway --save-dev
 ```
 
 
-### Features
-
-What you **can** do:
-
-- Create API resources
-- Configure resource's _Method Request_, _Integration Request_, _Method Response_, _Integration Response_
-- Deploy API changes to a stage
-
-What you **can't** do:
-
-- Create models
-
-**One time configuration** you should do by hand:
-
-- Create a new API
-- Create stages (once created, the plugin will deploy the API to the configured stage)
-
-**NOTE**: to ease the development of this plugin, each run **deletes all resources** and re-creates them. This means that it doesn't apply differential changes and if you've already created some resources that are not part of plugin configuration, you will loose it at the first run. In other words, make sure the plugin configuration contains all resources of your API.
-
-
 ### Usage
 
-The following usage example could look a bit "verbose" at a first glance. However, AWS API Gateway setup is pretty complex and the following `resources` structure tries to map a much close as possible the AWS API, in order to guarantee the same degree of flexibility.
+The following usage example could look a bit _verbose_ at a first glance. However, AWS API Gateway setup is pretty complex and the following `resources` structure tries to map as much close as possible the AWS API, in order to provide the same degree of flexibility.
 
 ```js
 grunt.initConfig({
@@ -91,6 +71,27 @@ grunt.registerTask(
     ["apigateway_deploy"]
 );
 ```
+
+
+### Features
+
+What you **can** do:
+
+- Create API resources
+- Configure resource's _Method Request_, _Integration Request_, _Method Response_, _Integration Response_
+- Deploy API changes to a stage
+
+What you **can't** do:
+
+- Create models
+
+**One time configuration** you should do by hand:
+
+- Create a new API
+- Create stages (once created, the plugin will deploy the API to the configured stage)
+
+**NOTE**: to ease the development of this plugin, each run **deletes all resources** and re-creates them. This means that it doesn't apply differential changes and if you've already created some resources that are not part of plugin configuration, you will loose it at the first run. In other words, make sure the plugin configuration contains all resources of your API.
+
 
 
 ### Syntax
