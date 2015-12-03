@@ -101,7 +101,107 @@ What you **can't** do:
 
 ### Syntax
 
-TODO
+The plugin config is made of 3 **required** properties:
+
+- `restApiId` (your API Gateway id)
+- `resources`
+- `deployment`
+
+
+##### `resources`
+
+The `resources` property contains the configuration of all your API Resources. Resources are organized in a tree, *must* start with a `/` and full path is built concatenating together all parent resources' paths.
+
+Example - create `/tweets/trends` resource:
+```js
+{
+    resources: {
+        "/tweets": {
+            "/trends": {}
+        }
+    }
+}
+```
+
+Each resource can have zero or more **methods**. For each method you must define a request and response integration (ie. a AWS Lambda function).
+
+Example - add `GET` method to `/tweets/trends` resource:
+```js
+{
+    resources: {
+        "/tweets": {
+            "/trends": {
+                methods: {
+                    GET: {
+                        integration: { /* Integration Request config */ },
+                        responses: { /* Integration Response config */ }
+                    }
+                }
+            }
+        }
+    }
+}
+```
+
+The resource's **Integration Request config** must contain the integration `type` and `uri`, along with other optional settings (ie. `requestTemplates`).
+
+Example - integrate a lambda function to `GET /tweets/trends`:
+```js
+integration: {
+    type: "AWS",
+    uri: "arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:xxx:function:getUsers/invocations",
+    integrationHttpMethod: "POST", // Lambda functions must be called with a POST
+    credentials: undefined,
+    requestParameters: {},
+    cacheNamespace: undefined,
+    cacheKeyParameters: [],
+    requestTemplates: {
+        "application/json": JSON.stringify({
+            "filter": "$input.params('filter')"
+        })
+    }
+}
+```
+
+The resource's **Integration Response config** is a map whose keys are the status codes, and the value is the configuration for each status code.
+
+Example - integrate `200` and `400` response codes:
+```js
+responses: {
+    200: {
+        responseModels: {
+            "application/json": "Empty"
+        },
+        responseParameters: {}
+    },
+    400: {
+        selectionPattern: "error code: 400",
+        responseTemplates: {
+            "application/json": JSON.stringify({"error": "$input.path('$.errorMessage')"})
+        },
+        responseParameters: {}
+    }
+}
+```
+
+
+##### `deployment`
+
+The last step of `apigateway_deploy` is to deploy all the changes to a stage. The configuration of this phase is made through the `deployment` property. `stageName` is the only required property.
+
+```js
+{
+    deployment: {
+        stageName: "prod",
+        cacheClusterEnabled: false,
+        cacheClusterSize: "1G"
+        description: "",
+        stageDescription: "",
+        variables: []
+    }
+}
+```
+
 
 
 ### License
