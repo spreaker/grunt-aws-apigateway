@@ -145,13 +145,13 @@ module.exports = function (grunt) {
             },
             function(done) {
                 // Create method responses
-                async.forEachOf(methodSetup.responses || {}, function(responseSetup, status, innerDone) {
+                async.forEachOfSeries(methodSetup.responses || {}, function(responseSetup, status, innerDone) {
                     _createResourceMethodResponse(resource, method, status, responseSetup, innerDone);
                 }, done);
             },
             function(done) {
                 // Create integration responses
-                async.forEachOf(methodSetup.responses || {}, function(responseSetup, status, innerDone) {
+                async.forEachOfSeries(methodSetup.responses || {}, function(responseSetup, status, innerDone) {
                     _createResourceIntegrationResponse(resource, method, status, responseSetup, innerDone);
                 }, done);
             }],
