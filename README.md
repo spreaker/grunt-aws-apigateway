@@ -205,6 +205,7 @@ The last step of `apigateway_deploy` is to deploy all the changes to a stage. Th
 
 ### Options
 
+| Option                    | Description |
 |-------------------------- | ----------- |
 | `options.region`          | AWS region where you would like to deploy your API. |
 | `options.accessKeyId`     | (_see below_)
