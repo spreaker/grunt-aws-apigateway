@@ -205,13 +205,11 @@ The last step of `apigateway_deploy` is to deploy all the changes to a stage. Th
 
 ### Options
 
-| Option                    | Default     | Description |
-|-------------------------- | ----------- | ----------- |
-| `options.region`          | `us-east-1` | AWS region where you would like to deploy your API |
-| `options.accessKeyId`     |             | (see below)
-| `options.secretAccessKey` |             | If you prefer to use hardcoded AWS credentials, you should both set `accessKeyId` and `secretAccessKey` |
-| `options.credentialsJSON` |             | If you prefer to use AWS credentials stored in a JSON file, you should set the JSON file path here ([file format](http://docs.aws.amazon.com/AWSJavaScriptSDK/guide/node-configuring.html#Credentials_from_Disk)). |
-| `options.profile`         |             | If you prefer to use a specific AWS credentials profile you can set it here. |
+| `options.region`          | AWS region where you would like to deploy your API. |
+| `options.accessKeyId`     | (_see below_)
+| `options.secretAccessKey` | If you prefer to use hardcoded AWS credentials, you should both set `accessKeyId` and `secretAccessKey`. |
+| `options.credentialsJSON` | If you prefer to use AWS credentials stored in a JSON file, you should set the JSON file path here ([file format](http://docs.aws.amazon.com/AWSJavaScriptSDK/guide/node-configuring.html#Credentials_from_Disk)). |
+| `options.profile`         | If you prefer to use a specific AWS credentials profile you can set it here. |
 
 
 
