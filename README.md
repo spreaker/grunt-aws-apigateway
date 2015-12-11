@@ -215,10 +215,10 @@ AWS region where you would like to deploy your API.
 If you prefer to use hardcoded AWS credentials, you should both set `accessKeyId` and `secretAccessKey`.
 
 #####  `options.credentialsJSON`
-If you prefer to use AWS credentials stored in a JSON file, you should set the JSON file path here ([file format](http://docs.aws.amazon.com/AWSJavaScriptSDK/guide/node-configuring.html#Credentials_from_Disk)).
+If you prefer to use [AWS credentials stored in a JSON file](http://docs.aws.amazon.com/AWSJavaScriptSDK/guide/node-configuring.html#Credentials_from_Disk), you should set the JSON file path here.
 
 ##### `options.profile`
-If you prefer to use a specific AWS credentials profile you can set it here.
+If you prefer to use a specific [AWS credentials profile](http://docs.aws.amazon.com/AWSJavaScriptSDK/guide/node-configuring.html#Using_Profiles_with_the_SDK) you can set it here.
 
 
 
