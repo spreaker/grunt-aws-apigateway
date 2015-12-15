@@ -94,6 +94,8 @@ What you **can't** do:
 
 - Create a new API
 - Create stages (once created, the plugin will deploy the API to the configured stage)
+- Create an IAM user with the policy required to deploy your API
+- Add permission to each Lambda function will get invoked by API Gateway (in case you're integration API Gateway with AWS Lambda functions). Troubleshooting section explains how to do it.
 
 **NOTE**: to ease the development of this plugin, each run **deletes all resources** and re-creates them. This means that it doesn't apply differential changes and if you've already created some resources that are not part of plugin configuration, you will loose it at the first run. In other words, make sure the plugin configuration contains all resources of your API.
 
@@ -220,6 +222,20 @@ If you prefer to use [AWS credentials stored in a JSON file](http://docs.aws.ama
 ##### `options.profile`
 If you prefer to use a specific [AWS credentials profile](http://docs.aws.amazon.com/AWSJavaScriptSDK/guide/node-configuring.html#Using_Profiles_with_the_SDK) you can set it here.
 
+
+### Troubleshooting
+
+##### "Internal server error" due to "Invalid permissions on Lambda function"
+
+This error occurs when you didn't add permission to run the Lambda function from the API Gateway service. To fix it, run the following command:
+```bash
+$ aws lambda add-permission --function-name "<your function name>" --action "lambda:InvokeFunction" --principal "apigateway.amazonaws.com" --source-arn "<your api gateway endpoint arn>" --statement-id "522028352"
+```
+
+Example:
+```bash
+aws lambda add-permission --function-name "getUsers" --action "lambda:InvokeFunction" --principal "apigateway.amazonaws.com" --source-arn "arn:aws:execute-api:us-east-1:123456789:abcdefg/*/GET/users" --statement-id "522028352"
+```
 
 
 ### Contributing
