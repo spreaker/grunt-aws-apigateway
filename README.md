@@ -95,7 +95,7 @@ What you **can't** do:
 - Create a new API
 - Create stages (once created, the plugin will deploy the API to the configured stage)
 - Create an IAM user with the policy required to deploy your API
-- Add permission to each Lambda function will get invoked by API Gateway (in case you're integration API Gateway with AWS Lambda functions). Troubleshooting section explains how to do it.
+- Add permission to each Lambda function will get invoked by API Gateway (in case you're integration API Gateway with AWS Lambda functions). [Troubleshooting section](#internal-server-error-due-to-invalid-permissions-on-lambda-function) explains how to do it.
 
 **NOTE**: to ease the development of this plugin, each run **deletes all resources** and re-creates them. This means that it doesn't apply differential changes and if you've already created some resources that are not part of plugin configuration, you will loose it at the first run. In other words, make sure the plugin configuration contains all resources of your API.
 
