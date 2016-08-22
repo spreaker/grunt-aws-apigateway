@@ -71,7 +71,12 @@ module.exports = function (grunt) {
             restApiId         : restApiId,
             statusCode        : status,
             responseModels    : responseSetup.responseModels || {},
-            responseParameters: responseSetup.responseParameters || {},
+            // NOTE: Response  parameters  are  represented  as  a key/value  map,
+            //       with a destination as the key and a Boolean flag as the value.
+            //       The Boolean flag is used to specify whether the parameter is required.
+            responseParameters: _(responseSetup.responseParameters || {}).mapObject(function() {
+                return false;
+            })
         };
 
         // Create method response
