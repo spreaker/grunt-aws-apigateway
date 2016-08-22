@@ -1,0 +1,105 @@
+0 info it worked if it ends with ok
+1 verbose cli [ 'node',
+1 verbose cli   '/Users/marco/.nvm/v0.10.36/bin/npm',
+1 verbose cli   'publish',
+1 verbose cli   '--force' ]
+2 info using npm@3.5.0
+3 info using node@v0.10.36
+4 warn using --force I sure hope you know what you are doing.
+5 verbose publish [ '.' ]
+6 silly cache add args [ '.', null ]
+7 verbose cache add spec .
+8 silly cache add parsed spec { raw: '.',
+8 silly cache add   scope: null,
+8 silly cache add   name: null,
+8 silly cache add   rawSpec: '.',
+8 silly cache add   spec: '/workspace/grunt-aws-apigateway',
+8 silly cache add   type: 'directory' }
+9 verbose addLocalDirectory /Users/marco/.npm/grunt-aws-apigateway/0.0.5/package.tgz not in flight; packing
+10 info lifecycle grunt-aws-apigateway@0.0.5~prepublish: grunt-aws-apigateway@0.0.5
+11 silly lifecycle grunt-aws-apigateway@0.0.5~prepublish: no script for prepublish, continuing
+12 verbose tar pack [ '/Users/marco/.npm/grunt-aws-apigateway/0.0.5/package.tgz',
+12 verbose tar pack   '/workspace/grunt-aws-apigateway' ]
+13 verbose tarball /Users/marco/.npm/grunt-aws-apigateway/0.0.5/package.tgz
+14 verbose folder /workspace/grunt-aws-apigateway
+15 verbose addLocalTarball adding from inside cache /Users/marco/.npm/grunt-aws-apigateway/0.0.5/package.tgz
+16 silly cache afterAdd grunt-aws-apigateway@0.0.5
+17 verbose afterAdd /Users/marco/.npm/grunt-aws-apigateway/0.0.5/package/package.json not in flight; writing
+18 verbose afterAdd /Users/marco/.npm/grunt-aws-apigateway/0.0.5/package/package.json written
+19 silly publish { name: 'grunt-aws-apigateway',
+19 silly publish   version: '0.0.5',
+19 silly publish   description: 'A grunt plugin to easily configure and deploy AWS API Gateway.',
+19 silly publish   scripts: { test: 'echo "Error: no test specified" && exit 1' },
+19 silly publish   repository:
+19 silly publish    { type: 'git',
+19 silly publish      url: 'git+ssh://git@github.com/spreaker/grunt-aws-apigateway.git' },
+19 silly publish   keywords:
+19 silly publish    [ 'gruntplugin',
+19 silly publish      'aws',
+19 silly publish      'api',
+19 silly publish      'gateway',
+19 silly publish      'setup',
+19 silly publish      'deploy',
+19 silly publish      'config' ],
+19 silly publish   author: { name: 'Marco Pracucci', email: 'marco@pracucci.com' },
+19 silly publish   license: 'MIT',
+19 silly publish   bugs: { url: 'https://github.com/spreaker/grunt-aws-apigateway/issues' },
+19 silly publish   homepage: 'https://github.com/spreaker/grunt-aws-apigateway#readme',
+19 silly publish   files: [ 'tasks' ],
+19 silly publish   dependencies: { async: '^1.5.0', 'aws-sdk': '^2.2.20', underscore: '^1.8.3' },
+19 silly publish   readme: '# grunt-aws-apigateway\n\nA grunt plugin to easily configure and deploy AWS API Gateway.\n\n\n### Scope\n\nAWS API Gateway configuration through the web console takes lot of mouse clicks and is error prone. This grunt plugin allows you to script and automatically deploy your API Gateway configuration.\n\n\n### Install\n\n```shell\nnpm install grunt-aws-apigateway --save-dev\n```\n\n\n### Usage\n\nThe following usage example could look a bit _verbose_ at a first glance. However, AWS API Gateway setup is pretty complex and the following `resources` structure tries to map as much close as possible the AWS API, in order to provide the same degree of flexibility.\n\n```js\ngrunt.initConfig({\n    apigateway_deploy: {\n        options: {\n            accessKeyId: "key",\n            secretAccessKey: "secret",\n            region: "us-east-1"\n        },\n        default: {\n            restApiId: "xxx",\n            deployment: {\n                stageName: "prod"\n            },\n            resources: {\n                "/users": {\n                    methods: {\n                        GET: {\n                            integration: {\n                                type: "AWS",\n                                uri: "arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:xxx:function:getUsers/invocations",\n                                integrationHttpMethod: "POST",\n                                requestTemplates: {\n                                    "application/json": JSON.stringify({\n                                        "filter": "$input.params(\'filter\')"\n                                    })\n                                }\n                            },\n                            responses: {\n                                200: {\n                                    // Pass-through\n                                    responseModels: {\n                                        "application/json": "Empty"\n                                    }\n                                },\n                                400: {\n                                    selectionPattern: "error code: 400",\n                                    responseTemplates: {\n                                        "application/json": JSON.stringify({"error": "$input.path(\'$.errorMessage\')"})\n                                    }\n                                }\n                            }\n                        }\n                    }\n                }\n            }\n        }\n    }\n});\n\ngrunt.loadNpmTasks(\'grunt-aws-apigateway\');\n\ngrunt.registerTask(\n    "deploy-api",\n    "Deploy the API Gateway config",\n    ["apigateway_deploy"]\n);\n```\n\n\n### Features\n\nWhat you **can** do:\n\n- Create API resources\n- Configure resource\'s _Method Request_, _Integration Request_, _Method Response_, _Integration Response_\n- Deploy API changes to a stage\n\nWhat you **can\'t** do:\n\n- Create models\n\n**One time configuration** you should do by hand:\n\n- Create a new API\n- Create stages (once created, the plugin will deploy the API to the configured stage)\n- Create an IAM user with the policy required to deploy your API\n- Add permission to each Lambda function will get invoked by API Gateway (in case you\'re integration API Gateway with AWS Lambda functions). [Troubleshooting section](#internal-server-error-due-to-invalid-permissions-on-lambda-function) explains how to do it.\n\n**NOTE**: to ease the development of this plugin, each run **deletes all resources** and re-creates them. This means that it doesn\'t apply differential changes and if you\'ve already created some resources that are not part of plugin configuration, you will loose it at the first run. In other words, make sure the plugin configuration contains all resources of your API.\n\n\n\n### Configuration\n\nThe plugin config is made of 3 **required** properties:\n\n- `restApiId` (your API Gateway id)\n- `resources`\n- `deployment`\n\n\n#### `resources`\n\nThe `resources` property contains the configuration of all your API Resources. Resources are organized in a tree, the path *must* start with a `/` and each resource\'s full path is built concatenating together all parent resources paths.\n\nExample - create `/tweets/trends` resource:\n```js\n{\n    resources: {\n        "/tweets": {\n            "/trends": {}\n        }\n    }\n}\n```\n\nEach resource can have zero or more **methods**. For each method you must define a request and response integration (ie. a AWS Lambda function).\n\nExample - add `GET` method to `/tweets/trends` resource:\n```js\n{\n    resources: {\n        "/tweets": {\n            "/trends": {\n                methods: {\n                    GET: {\n                        authorizationType: "NONE",\n                        apiKeyRequired: false,\n                        integration: { /* Integration Request config */ },\n                        responses: { /* Integration Response config */ }\n                    }\n                }\n            }\n        }\n    }\n}\n```\n\nThe resource\'s **Integration Request config** must contain the integration `type` and `uri`, along with other optional settings (ie. `requestTemplates`).\n\nExample - integrate a lambda function to `GET /tweets/trends`:\n```js\nintegration: {\n    type: "AWS",\n    uri: "arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:xxx:function:getUsers/invocations",\n    integrationHttpMethod: "POST", // Lambda functions must be called with a POST\n    credentials: undefined,\n    requestParameters: {},\n    cacheNamespace: undefined,\n    cacheKeyParameters: [],\n    requestTemplates: {\n        "application/json": JSON.stringify({\n            "filter": "$input.params(\'filter\')"\n        })\n    }\n}\n```\n\nThe resource\'s **Integration Response config** is a map whose keys are the status codes, and the value is the configuration for each status code.\n\nExample - integrate `200` and `400` response codes:\n```js\nresponses: {\n    200: {\n        responseModels: {\n            "application/json": "Empty"\n        },\n        responseParameters: {},\n        responseTemplates: {}\n    },\n    400: {\n        selectionPattern: "error code: 400",\n        responseParameters: {},\n        responseTemplates: {\n            "application/json": JSON.stringify({"error": "$input.path(\'$.errorMessage\')"})\n        }\n    }\n}\n```\n\n\n#### `deployment`\n\nThe last step of `apigateway_deploy` is to deploy all the changes to a stage. The configuration of this phase is made through the `deployment` property. `stageName` is the only required property.\n\n```js\n{\n    deployment: {\n        stageName: "prod",\n        cacheClusterEnabled: false,\n        cacheClusterSize: "1G"\n        description: "",\n        stageDescription: "",\n        variables: []\n    }\n}\n```\n\n\n### Options\n\n##### `options.region`\nAWS region where you would like to deploy your API.\n\n##### `options.accessKeyId` and `options.secretAccessKey`\nIf you prefer to use hardcoded AWS credentials, you should both set `accessKeyId` and `secretAccessKey`.\n\n#####  `options.credentialsJSON`\nIf you prefer to use [AWS credentials stored in a JSON file](http://docs.aws.amazon.com/AWSJavaScriptSDK/guide/node-configuring.html#Credentials_from_Disk), you should set the JSON file path here.\n\n##### `options.profile`\nIf you prefer to use a specific [AWS credentials profile](http://docs.aws.amazon.com/AWSJavaScriptSDK/guide/node-configuring.html#Using_Profiles_with_the_SDK) you can set it here.\n\n\n### Troubleshooting\n\n##### "Internal server error" due to "Invalid permissions on Lambda function"\n\nThis error occurs when you didn\'t add permission to run the Lambda function from the API Gateway service. To fix it, run the following command:\n```bash\n$ aws lambda add-permission --function-name "<your function name>" --action "lambda:InvokeFunction" --principal "apigateway.amazonaws.com" --source-arn "<your api gateway endpoint arn>" --statement-id "522028352"\n```\n\nExample:\n```bash\naws lambda add-permission --function-name "getUsers" --action "lambda:InvokeFunction" --principal "apigateway.amazonaws.com" --source-arn "arn:aws:execute-api:us-east-1:123456789:abcdefg/*/GET/users" --statement-id "522028352"\n```\n\n\n### Contributing\n\nYou\'re very welcome to contribute to this pluging, in case you spot any bug, or to add some missing features (ie. create models). Please do your best to:\n\n- Keep the coding style\n- Keep your code as much clean (and readable) as possible\n\n\n### License\n\nMIT\n',
+19 silly publish   readmeFilename: 'README.md',
+19 silly publish   gitHead: '398d902cef44b7e04c9724611cc4fddb08723b24',
+19 silly publish   _id: 'grunt-aws-apigateway@0.0.5',
+19 silly publish   _shasum: '1006c117bcbb62e72899b257d0c11cc8c775bcc7',
+19 silly publish   _from: '.' }
+20 verbose getPublishConfig undefined
+21 silly mapToRegistry name grunt-aws-apigateway
+22 silly mapToRegistry using default registry
+23 silly mapToRegistry registry https://registry.npmjs.org/
+24 silly mapToRegistry uri https://registry.npmjs.org/grunt-aws-apigateway
+25 verbose publish registryBase https://registry.npmjs.org/
+26 silly publish uploading /Users/marco/.npm/grunt-aws-apigateway/0.0.5/package.tgz
+27 verbose request uri https://registry.npmjs.org/grunt-aws-apigateway
+28 verbose request sending authorization for write operation
+29 info attempt registry request try #1 at 12:14:46
+30 verbose request id cc709dbab6bf4514
+31 http request PUT https://registry.npmjs.org/grunt-aws-apigateway
+32 http 403 https://registry.npmjs.org/grunt-aws-apigateway
+33 verbose headers { 'content-type': 'application/json',
+33 verbose headers   'cache-control': 'max-age=300',
+33 verbose headers   'content-length': '95',
+33 verbose headers   'accept-ranges': 'bytes',
+33 verbose headers   date: 'Mon, 22 Aug 2016 10:14:45 GMT',
+33 verbose headers   via: '1.1 varnish',
+33 verbose headers   connection: 'keep-alive',
+33 verbose headers   'x-served-by': 'cache-lhr6342-LHR',
+33 verbose headers   'x-cache': 'MISS',
+33 verbose headers   'x-cache-hits': '0',
+33 verbose headers   'x-timer': 'S1471860884.444597,VS0,VE1313',
+33 verbose headers   vary: 'Accept-Encoding' }
+34 verbose request invalidating /Users/marco/.npm/registry.npmjs.org/grunt-aws-apigateway on PUT
+35 error publish Failed PUT 403
+36 verbose stack Error: "You cannot publish over the previously published version 0.0.5." : grunt-aws-apigateway
+36 verbose stack     at makeError (/Users/marco/.nvm/v0.10.36/lib/node_modules/npm/node_modules/npm-registry-client/lib/request.js:264:12)
+36 verbose stack     at CachingRegistryClient.<anonymous> (/Users/marco/.nvm/v0.10.36/lib/node_modules/npm/node_modules/npm-registry-client/lib/request.js:252:14)
+36 verbose stack     at Request._callback (/Users/marco/.nvm/v0.10.36/lib/node_modules/npm/node_modules/npm-registry-client/lib/request.js:172:14)
+36 verbose stack     at Request.self.callback (/Users/marco/.nvm/v0.10.36/lib/node_modules/npm/node_modules/request/request.js:198:22)
+36 verbose stack     at Request.emit (events.js:98:17)
+36 verbose stack     at Request.<anonymous> (/Users/marco/.nvm/v0.10.36/lib/node_modules/npm/node_modules/request/request.js:1082:10)
+36 verbose stack     at Request.emit (events.js:117:20)
+36 verbose stack     at IncomingMessage.<anonymous> (/Users/marco/.nvm/v0.10.36/lib/node_modules/npm/node_modules/request/request.js:1009:12)
+36 verbose stack     at IncomingMessage.emit (events.js:117:20)
+36 verbose stack     at _stream_readable.js:944:16
+37 verbose statusCode 403
+38 verbose pkgid grunt-aws-apigateway
+39 verbose cwd /workspace/grunt-aws-apigateway
+40 error Darwin 13.4.0
+41 error argv "node" "/Users/marco/.nvm/v0.10.36/bin/npm" "publish" "--force"
+42 error node v0.10.36
+43 error npm  v3.5.0
+44 error code E403
+45 error "You cannot publish over the previously published version 0.0.5." : grunt-aws-apigateway
+46 error If you need help, you may report this error at:
+46 error     <https://github.com/npm/npm/issues>
+47 verbose exit [ 1, true ]

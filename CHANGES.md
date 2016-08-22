@@ -1,6 +1,6 @@
 # Changes
 
-#### 0.0.5 (2016-08-22)
+#### 0.0.6 (2016-08-22)
 * FIX: the `responseParameters` values in resource's method response should be boolean, used to specify whether the parameter is required. We currently always force it to `false`, in order to avoid any breaking change in the configuration format.
 
 #### 0.0.4 (2015-12-04)
