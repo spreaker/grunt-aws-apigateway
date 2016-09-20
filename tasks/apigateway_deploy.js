@@ -188,7 +188,7 @@ module.exports = function (grunt) {
             }
 
             // Create methods
-            async.forEachOf(setup.methods || {}, function(methodSetup, method, callback) {
+            async.forEachOfSeries(setup.methods || {}, function(methodSetup, method, callback) {
                 _createResourceMethodRequest(resource, method, methodSetup, callback);
             }, function(err) {
                 callback(err, resource);
