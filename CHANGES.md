@@ -1,5 +1,8 @@
 # Changes
 
+#### 0.0.7 (2016-09-20)
+* FIX: `concurrent modification` error when creating methods (see PR [#5](https://github.com/spreaker/grunt-aws-apigateway/pull/5), thanks to [Tomas Romero](https://github.com/taromero))
+
 #### 0.0.6 (2016-08-22)
 * FIX: the `responseParameters` values in resource's method response should be boolean, used to specify whether the parameter is required. We currently always force it to `false`, in order to avoid any breaking change in the configuration format.
 
