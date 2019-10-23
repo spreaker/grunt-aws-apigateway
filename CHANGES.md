@@ -1,5 +1,8 @@
 # Changes
 
+#### 0.0.8 (2019-10-23)
+* Updated dependencies (see PR [#6](https://github.com/spreaker/grunt-aws-apigateway/pull/6), thanks to [Matteo Rossi](https://github.com/teorossi82))
+
 #### 0.0.7 (2016-09-20)
 * FIX: `concurrent modification` error when creating methods (see PR [#5](https://github.com/spreaker/grunt-aws-apigateway/pull/5), thanks to [Tomas Romero](https://github.com/taromero))
 
