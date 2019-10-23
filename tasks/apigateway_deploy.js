@@ -204,14 +204,16 @@ module.exports = function (grunt) {
     function _createResources(setup, parentResource, callback) {
         // Create each resource at this level
         async.forEachOfSeries(_getResourcesFromSetup(setup), function(setup, path, callback) {
-            setTimeout(_createResource(path, setup, parentResource, function(err, resource) {
-                if (err) {
-                    return callback(err);
-                }
+            setTimeout(function() {
+                _createResource(path, setup, parentResource, function(err, resource) {
+                    if (err) {
+                        return callback(err);
+                    }
 
-                // Create sub-resources
-                _createResources(setup, resource, callback);
-            }),500);
+                    // Create sub-resources
+                    _createResources(setup, resource, callback);
+                })
+            }, 500);
         }, callback);
     }
 
@@ -222,21 +224,23 @@ module.exports = function (grunt) {
      * @param  {Function} callback
      */
     function _deleteResource(resource, callback) {
-        grunt.log.writeln("Delete resource: " + resource.path);
+        setTimeout(function() {
+            grunt.log.writeln("Delete resource: " + resource.path);
 
-        var params = {
-            resourceId: resource.id,
-            restApiId: restApiId
-        };
+            var params = {
+                resourceId: resource.id,
+                restApiId: restApiId
+            };
 
-        apigateway.deleteResource(params, function(err, data) {
-            // The resource could have already been deleted
-            if (!err || err.message === "Invalid Resource identifier specified") {
-                callback();
-            } else {
-                callback(new Error("Unable to delete a resource " + resource.path + ": " + err.message));
-            }
-        });
+            apigateway.deleteResource(params, function(err, data) {
+                // The resource could have already been deleted
+                if (!err || err.message === "Invalid Resource identifier specified") {
+                    callback();
+                } else {
+                    callback(new Error("Unable to delete a resource " + resource.path + ": " + err.message));
+                }
+            });
+        }, 500);
     }
 
     /**
@@ -304,7 +308,7 @@ module.exports = function (grunt) {
             async.series([
                 function(done) {
                     // Delete all resources except root
-                    async.each(_(resources).filter(function(resource) { return resource.path !== "/"; }), setTimeout(_deleteResource, 500), done);
+                    async.each(_(resources).filter(function(resource) { return resource.path !== "/"; }), _deleteResource, done);
                 },
                 function(done) {
                     // Create resources
