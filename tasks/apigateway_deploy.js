@@ -204,14 +204,14 @@ module.exports = function (grunt) {
     function _createResources(setup, parentResource, callback) {
         // Create each resource at this level
         async.forEachOfSeries(_getResourcesFromSetup(setup), function(setup, path, callback) {
-            _createResource(path, setup, parentResource, function(err, resource) {
+            setTimeout(_createResource(path, setup, parentResource, function(err, resource) {
                 if (err) {
                     return callback(err);
                 }
 
                 // Create sub-resources
                 _createResources(setup, resource, callback);
-            });
+            }),500);
         }, callback);
     }
 
@@ -304,7 +304,7 @@ module.exports = function (grunt) {
             async.series([
                 function(done) {
                     // Delete all resources except root
-                    async.each(_(resources).filter(function(resource) { return resource.path !== "/"; }), _deleteResource, done);
+                    async.each(_(resources).filter(function(resource) { return resource.path !== "/"; }), setTimeout(_deleteResource, 500), done);
                 },
                 function(done) {
                     // Create resources
