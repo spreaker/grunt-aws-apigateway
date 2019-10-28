@@ -161,7 +161,7 @@ module.exports = function (grunt) {
                 }, done);
             },
             function(done) {
-                // Add a sleep to avoid "Too meany requests" error
+                // Add a sleep to avoid "Too many requests" error
                 setTimeout(function() {
                     done();
                 }, 1000);
