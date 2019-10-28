@@ -1,5 +1,8 @@
 # Changes
 
+#### 0.0.9 (2019-10-28)
+* Added sleep to the `resources method creation` to avoid (see PR [#7](https://github.com/spreaker/grunt-aws-apigateway/pull/7), thanks to [Matteo Rossi](https://github.com/teorossi82))
+
 #### 0.0.8 (2019-10-23)
 * Updated dependencies (see PR [#6](https://github.com/spreaker/grunt-aws-apigateway/pull/6), thanks to [Matteo Rossi](https://github.com/teorossi82))
 

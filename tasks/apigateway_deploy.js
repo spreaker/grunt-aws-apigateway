@@ -217,7 +217,7 @@ module.exports = function (grunt) {
 
                 // Create sub-resources
                 _createResources(setup, resource, callback);
-            })
+            });
         }, callback);
     }
 
