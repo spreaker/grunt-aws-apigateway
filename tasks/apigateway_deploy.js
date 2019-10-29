@@ -159,6 +159,12 @@ module.exports = function (grunt) {
                 async.forEachOfSeries(methodSetup.responses || {}, function(responseSetup, status, innerDone) {
                     _createResourceIntegrationResponse(resource, method, status, responseSetup, innerDone);
                 }, done);
+            },
+            function(done) {
+                // Add a sleep to avoid "Too many requests" error
+                setTimeout(function() {
+                    done();
+                }, 1000);
             }],
             callback
         );
